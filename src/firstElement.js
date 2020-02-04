@@ -1,3 +1,5 @@
+const normalizeClassName = require('./normalizeClassName')
+
 const firstElement = (markup, className) => {
   const firstWordSearch = markup.match(/^<p(?:[^>]*)>(\w*)\b[<"'\s]/i)
 
@@ -6,7 +8,7 @@ const firstElement = (markup, className) => {
     const wrappedFirstWord = `
       <span aria-label="${firstWord}">
         <span aria-hidden="true">
-          <span class="${className}">${firstWord.slice(0,1)}</span>${firstWord.slice(1)}
+          <span class="${normalizeClassName(className)}">${firstWord.slice(0,1)}</span>${firstWord.slice(1)}
         </span>
       </span>
     `

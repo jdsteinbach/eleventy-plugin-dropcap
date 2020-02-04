@@ -1,11 +1,12 @@
 const firstElement = require('./firstElement')
 
-const dropCap = (text, opts) => {
-  let { className } = {
+const dropCap = (text, options) => {
+  options = {
     className: 'first-letter',
-    ...opts
+    ...options
   }
 
+  const { className } = options
   return firstElement(text, className)
 }
 
