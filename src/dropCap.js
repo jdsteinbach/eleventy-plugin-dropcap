@@ -2,12 +2,14 @@ const firstElement = require('./firstElement')
 
 const dropCap = (text, options) => {
   options = {
-    className: 'first-letter',
+    dropCapClass: 'drop-cap',
+    hiddenTextClass: 'screen-reader-only',
     ...options
   }
 
-  const { className } = options
-  return firstElement(text, className)
+  const { dropCapClass, hiddenTextClass } = options
+
+  return firstElement(text, dropCapClass, hiddenTextClass)
 }
 
 module.exports = dropCap

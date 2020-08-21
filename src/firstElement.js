@@ -1,21 +1,30 @@
-const normalizeClassName = require('./normalizeClassName')
+const cheerio = require('cheerio')
 
-const firstElement = (markup, className) => {
-  const firstWordSearch = markup.match(/^<p(?:[^>]*)>(\w*)\b[<"'\s]/i)
+const normalizedropCapClass = require('./normalizeClassName')
 
-  if (firstWordSearch && firstWordSearch.length > 1) {
-    const firstWord = firstWordSearch[1]
-    const wrappedFirstWord = `
-      <span aria-label="${firstWord}">
-        <span aria-hidden="true">
-          <span class="${normalizeClassName(className)}">${firstWord.slice(0,1)}</span>${firstWord.slice(1)}
-        </span>
-      </span>
-    `
-    return markup.replace(firstWord, wrappedFirstWord)
+const firstElement = (markup, dropCapClass, hiddenTextClass) => {
+  const $ = cheerio.load(markup)
+
+  const firstWord = $('p:first-child').text().split(' ')[0]
+
+  if (!firstWord) {
+    return markup
   }
 
-  return markup
+  const firstLetter = firstWord.match(/\w/i)
+
+  if (!firstLetter || firstLetter.index !== 0) {
+    return markup
+  }
+
+  const wrappedFirstWord = `
+    <span aria-hidden="true">
+      <span class="${dropCapClass}">${firstLetter[0]}</span>${firstWord.slice(1)}
+    </span>
+    <span class="${hiddenTextClass}">${firstWord}</span>
+  `
+
+  return markup.replace(firstWord, wrappedFirstWord)
 }
 
 module.exports = firstElement
