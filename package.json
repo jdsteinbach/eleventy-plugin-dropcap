@@ -1,6 +1,6 @@
 {
   "name": "eleventy-plugin-dropcap",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Adds an Eleventy filter for adding accessible, stylable dropcap markup to the content of a page.",
   "main": ".eleventy.js",
   "scripts": {
@@ -25,7 +25,7 @@
     "url": "https://github.com/jdsteinbach/eleventy-plugin-dropcap/issues"
   },
   "homepage": "https://github.com/jdsteinbach/eleventy-plugin-dropcap#readme",
-  "dependencies": {
-    "cheerio": "^1.0.0-rc.3"
+  "devDependencies": {
+    "cheerio": "^1.0.0-rc.10"
   }
 }
