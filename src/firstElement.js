@@ -1,11 +1,18 @@
 const cheerio = require('cheerio')
 
-const normalizedropCapClass = require('./normalizeClassName')
+const normalizeClassName = require('./normalizeClassName')
+const selectorFromClasses = require('./selectorFromClasses')
 
-const firstElement = (markup, dropCapClass, hiddenTextClass) => {
+const firstElement = (markup, dropCapClass, hiddenTextClass, skipFirstParagraphClass) => {
   const $ = cheerio.load(markup)
 
-  const firstWord = $('p:first-child').text().split(' ')[0]
+  skipFirstParagraphClass = selectorFromClasses(skipFirstParagraphClass)
+
+  const firstParagraph = skipFirstParagraphClass
+    ? $(`p${skipFirstParagraphClass}:first-child + p`)
+    : $('p:first-child')
+
+  const firstWord = firstParagraph.text().split(' ')[0]
 
   if (!firstWord) {
     return markup
@@ -18,11 +25,11 @@ const firstElement = (markup, dropCapClass, hiddenTextClass) => {
   }
 
   const wrappedFirstWord = `
-    <span aria-hidden="true">
-      <span class="${dropCapClass}">${firstLetter[0]}</span>${firstWord.slice(1)}
-    </span>
-    <span class="${hiddenTextClass}">${firstWord}</span>
-  `
+<span aria-hidden="true">
+  <span class="${normalizeClassName(dropCapClass)}">${firstLetter[0]}</span>${firstWord.slice(1)}
+</span>
+<span class="${hiddenTextClass}">${firstWord}</span>
+`
 
   return markup.replace(firstWord, wrappedFirstWord)
 }
